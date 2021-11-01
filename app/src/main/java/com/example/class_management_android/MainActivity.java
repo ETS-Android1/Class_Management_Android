@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         // Add menu item
         bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_notification));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_home));
-        bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_about));
+        bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_bottom_bar_classroom));
+        bottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.ic_about));
 
         bottomNavigation.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
@@ -39,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                     case 3:
-                        // When id is 3, initialize about fragment
+                        // When id is 3, initialize home fragment
+                        fragment = new ClassroomListFragment();
+                        break;
+                    case 4:
+                        // When id is 4, initialize about fragment
                         fragment = new AboutFragment();
                         break;
                 }
@@ -50,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
         // Set notification count
         bottomNavigation.setCount(1, "10");
         // Set home fragment initially selected
-        bottomNavigation.show(2, true);
+        bottomNavigation.show(3, true);
+
+//        Các thao tác xử lý khi click vào botton navigation
         bottomNavigation.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item)
