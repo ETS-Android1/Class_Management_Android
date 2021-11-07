@@ -48,6 +48,12 @@ public class ClassroomListFragment extends Fragment implements SearchView.OnQuer
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshListClassManagersData();
+    }
+
     public void refreshListClassManagersData()
     {
         DbClassroomHelper dbClassManagerHelper = new DbClassroomHelper(getActivity(), null);

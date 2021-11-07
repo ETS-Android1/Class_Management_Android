@@ -7,4 +7,10 @@
         app:showAsAction="always"
         android:title=""
         />
+<!--    <item-->
+<!--        android:id="@+id/action_back"-->
+<!--        android:icon="@drawable/ic_about"-->
+<!--        android:title=""-->
+<!--        app:showAsAction="always"-->
+<!--        />-->
 </menu>

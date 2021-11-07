@@ -2,6 +2,8 @@ package com.example.class_management_android;
 
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,16 +19,27 @@ import com.example.class_management_android.model.Classroom;
 
 import java.util.Calendar;
 
-public class EditClassroomActivity extends AppCompatActivity {
+public class EditClassroomActivity extends AppCompatActivity
+{
     private TextView tvTitle;
     private EditText etID, etName, etStart, etEnd, etRoom;
     private String mId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_classroom);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // calling the action bar
+        ActionBar actionBar = getSupportActionBar();
+        // Customize the back button
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_back_action);
+        // showing the back button in action bar
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        // edit title in action bar
+        actionBar.setTitle("");
+
         tvTitle = (TextView) findViewById(R.id.tvTitleClass);
         etID = (EditText) findViewById(R.id.etIDClass);
         etName = (EditText) findViewById(R.id.etNameClass);
@@ -44,7 +57,7 @@ public class EditClassroomActivity extends AppCompatActivity {
             if (classroom != null) {
                 tvTitle.setText(R.string.update_class);
                 etID.setText(classroom.getId());
-                etID.setEnabled(false);
+                etID.setEnabled(false); // không cho phép sửa ID trong lúc edit
                 etName.setText(classroom.getSubjectName());
                 etName.requestFocus();
                 etStart.setText(classroom.getStartTime());
@@ -54,7 +67,6 @@ public class EditClassroomActivity extends AppCompatActivity {
         }
 
         etStart.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -71,12 +83,10 @@ public class EditClassroomActivity extends AppCompatActivity {
                 }, hour, minute, true);
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
-
             }
         });
 
         etEnd.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -102,23 +112,40 @@ public class EditClassroomActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mId == null)
+            // trong chế độ adding
             return super.onCreateOptionsMenu(menu);
-        else {
+        else
+        {
+            // trong chế độ editting
             getMenuInflater().inflate(R.menu.menu_edit, menu);
             return true;
         }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_delete) {
-            DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-            if (dbHelper.delete(mId) > 0) {
-                Toast.makeText(this, getString(R.string.deleted), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+            {
+                this.finish();
+                return true;
             }
-            return true;
+            case R.id.action_delete:
+            {
+                DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
+                if (dbHelper.delete(mId) > 0)
+                {
+                    Toast.makeText(this, getString(R.string.deleted), Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                }
+                this.finish();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -165,12 +192,9 @@ public class EditClassroomActivity extends AppCompatActivity {
         classroom.setEndTime(etEnd.getText().toString());
         classroom.setClassroomName(etRoom.getText().toString());
         DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-        float check = dbHelper.add(classroom);
-        if (check > 0)
+        if (dbHelper.add(classroom) > 0)
         {
             showToastMessage(getString(R.string.saved));
-//            navigateToClassroomList();
-            this.finish();
         }
         else
         {
@@ -179,6 +203,7 @@ public class EditClassroomActivity extends AppCompatActivity {
             else
                 showToastMessage(getString(R.string.error));
         }
+        this.finish();
     }
 
     private void updateClassroom()
@@ -204,7 +229,6 @@ public class EditClassroomActivity extends AppCompatActivity {
         DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
         if (dbHelper.update(classroom) > 0) {
             showToastMessage(getString(R.string.saved));
-//            navigateToClassroomList();
             this.finish();
         } else {
             showToastMessage(getString(R.string.error));
@@ -220,5 +244,10 @@ public class EditClassroomActivity extends AppCompatActivity {
     {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+    }
+
+    public void back(View v)
+    {
+        this.finish();
     }
 }

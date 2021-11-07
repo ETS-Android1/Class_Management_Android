@@ -15,7 +15,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // hide The Default Actionbar
+        getSupportActionBar().hide();
         // Assign variable
         bottomNavigation = findViewById(R.id.bottom_navigation);
         // Add menu item
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClickItem(MeowBottomNavigation.Model item)
             {
                 // Display toast
-                Toast.makeText(getApplicationContext(),"You clicked " + item.getId(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),"You clicked " + item.getId(), Toast.LENGTH_SHORT).show();
             }
         });
         bottomNavigation.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             public void onReselectItem(MeowBottomNavigation.Model item)
             {
                 // Display toast
-                Toast.makeText(getApplicationContext(),"You reselected " + item.getId(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),"You reselected " + item.getId(), Toast.LENGTH_SHORT).show();
             }
         });
     }

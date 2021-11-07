@@ -19,7 +19,8 @@ public class LoginActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        // hide The Default Actionbar
+        getSupportActionBar().hide();
         edt_user_name = (EditText)findViewById(R.id.edtUserName);
         edt_password = (EditText)findViewById(R.id.edtPasswords);
         btn_login = (Button)findViewById(R.id.btnLogin);
