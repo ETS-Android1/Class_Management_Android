@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.class_management_android.R;
 import com.example.class_management_android.model.Student;
 
 import java.util.List;
@@ -24,6 +25,12 @@ public class StudentAdapter extends ArrayAdapter<Student>
         this.m_list_students = objects;
     }
 
+    private class viewHolder
+    {
+        TextView tvOrderStudent, tvIdStudent, tvNameStudent, tvBirthdayStudent;
+        ImageView ivGenderStudent;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -32,11 +39,11 @@ public class StudentAdapter extends ArrayAdapter<Student>
             convertView = View.inflate(m_context, m_resource_id,null);
 
             holder = new viewHolder();
-//            holder.tvOrderStudent = (TextView) convertView.findViewById(R.id.tvOrderStudent);
-//            holder.tvIdStudent = (TextView) convertView.findViewById(R.id.tvIdStudent);
-//            holder.tvNameStudent = (TextView) convertView.findViewById(R.id.tvNameStudent);
-//            holder.tvBirthdayStudent = (TextView) convertView.findViewById(R.id.tvBirthdayStudent);
-//            holder.ivGenderStudent = (ImageView) convertView.findViewById(R.id.ivGenderStudent);
+            holder.tvOrderStudent = (TextView) convertView.findViewById(R.id.tvOrderStudent);
+            holder.tvIdStudent = (TextView) convertView.findViewById(R.id.tvIdStudent);
+            holder.tvNameStudent = (TextView) convertView.findViewById(R.id.tvNameStudent);
+            holder.tvBirthdayStudent = (TextView) convertView.findViewById(R.id.tvBirthdayStudent);
+            holder.ivGenderStudent = (ImageView) convertView.findViewById(R.id.ivGenderStudent);
             convertView.setTag(holder);
         }else
             holder = (viewHolder) convertView.getTag();
@@ -60,16 +67,12 @@ public class StudentAdapter extends ArrayAdapter<Student>
         holder.tvNameStudent.setText(student.getName());
 
         holder.tvBirthdayStudent.setText(student.getBirthday());
-//        if(student.getGender() == 0)
-//            holder.ivGenderStudent.setImageResource(R.drawable.girlicon);
-//        else
-//            holder.ivGenderStudent.setImageResource(R.drawable.boyicon);
+        if(student.getGender() == 0)
+            holder.ivGenderStudent.setImageResource(R.mipmap.ic_female_student);
+        else
+            holder.ivGenderStudent.setImageResource(R.mipmap.ic_male_student);
 
         return convertView;
     }
 
-    private class viewHolder{
-        TextView tvOrderStudent, tvIdStudent, tvNameStudent, tvBirthdayStudent;
-        ImageView ivGenderStudent;
-    }
 }

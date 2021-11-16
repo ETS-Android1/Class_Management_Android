@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_app"
@@ -12,6 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Class_Management_Android">
+        <activity
+            android:name=".EditStudentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StudentsListActivity"
+            android:exported="false" />
         <activity
             android:name=".EditClassroomActivity"
             android:exported="false" />

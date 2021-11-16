@@ -1,7 +1,11 @@
 package com.example.class_management_android;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.class_management_android.database.DbClassroomHelper;
+import com.example.class_management_android.database.DbStudentHelper;
 import com.example.class_management_android.model.Classroom;
 
 import java.util.Calendar;
@@ -39,6 +44,7 @@ public class EditClassroomActivity extends AppCompatActivity
         actionBar.setDisplayHomeAsUpEnabled(true);
         // edit title in action bar
         actionBar.setTitle("");
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1E313E"))); // dark_blue
 
         tvTitle = (TextView) findViewById(R.id.tvTitleClass);
         etID = (EditText) findViewById(R.id.etIDClass);
@@ -108,7 +114,7 @@ public class EditClassroomActivity extends AppCompatActivity
         });
     }
 
-    // create a menu to edit
+    // create a menu for adding and editing mode
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mId == null)
@@ -134,16 +140,7 @@ public class EditClassroomActivity extends AppCompatActivity
             }
             case R.id.action_delete:
             {
-                DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-                if (dbHelper.delete(mId) > 0)
-                {
-                    Toast.makeText(this, getString(R.string.deleted), Toast.LENGTH_LONG).show();
-                }
-                else
-                {
-                    Toast.makeText(this, getString(R.string.error), Toast.LENGTH_LONG).show();
-                }
-                this.finish();
+                deleteClassroom(mId);
                 return true;
             }
         }
@@ -235,19 +232,30 @@ public class EditClassroomActivity extends AppCompatActivity
         }
     }
 
+    // show a message to delete a classroom in db with classroom's id
+    private void deleteClassroom(final String id)
+    {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle(R.string.delete).setMessage(getString(R.string.delete_classroom_message) + " - Classroom's code: " + id + " ?")
+                .setIcon(android.R.drawable.ic_delete)
+                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        DbClassroomHelper dbHelper = new DbClassroomHelper(EditClassroomActivity.this, null);
+                        if (dbHelper.delete(id) > 0) {
+                            showToastMessage(getString(R.string.deleted));
+                            EditClassroomActivity.this.finish();
+                        } else {
+                            showToastMessage(getString(R.string.error));
+                        }
+                    }
+                });
+        b.create().show();
+    }
+
     private void showToastMessage(String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
-    }
-
-    private void navigateToClassroomList()
-    {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-    }
-
-    public void back(View v)
-    {
-        this.finish();
     }
 }

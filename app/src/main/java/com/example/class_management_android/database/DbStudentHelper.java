@@ -138,7 +138,7 @@ public class DbStudentHelper extends SQLiteOpenHelper implements DbHelper
         values.put(COLUMN_GENDER, student.getGender());
         values.put(COLUMN_PHONE_NUMBER, student.getPhoneNumber());
         values.put(COLUMN_EMAIL, student.getEmail());
-        values.put(COLUMN_CLASS_ID,student.getClassID());
+        values.put(COLUMN_CLASS_ID,student.getClassId());
         SQLiteDatabase db = this.getWritableDatabase();
         ret = db.insert(TABLE_NAME, null, values);
         db.close();
@@ -156,7 +156,7 @@ public class DbStudentHelper extends SQLiteOpenHelper implements DbHelper
         values.put(COLUMN_GENDER, student.getGender());
         values.put(COLUMN_PHONE_NUMBER, student.getPhoneNumber());
         values.put(COLUMN_EMAIL, student.getEmail());
-        values.put(COLUMN_CLASS_ID,student.getClassID());
+        values.put(COLUMN_CLASS_ID,student.getClassId());
         SQLiteDatabase db = this.getWritableDatabase();
         ret = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{student.getId()});
         db.close();

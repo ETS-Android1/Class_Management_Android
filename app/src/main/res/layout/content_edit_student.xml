@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,30 +10,32 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context=".EditClassroomActivity"
-    tools:showIn="@layout/activity_edit_classroom">
+    tools:context=".EditStudentActivity"
+    tools:showIn="@layout/activity_edit_student">
 
     <TextView
-        android:id="@+id/tvTitleClass"
+        android:id="@+id/tvTitleStudent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:paddingTop="@dimen/activity_horizontal_padding"
         android:paddingBottom="@dimen/activity_horizontal_padding"
-        android:text="@string/themlop"
+        android:paddingTop="@dimen/activity_horizontal_padding"
+        android:text="@string/themsv"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/dark_blue" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTitleClass"
+        android:layout_below="@+id/tvTitleStudent"
         android:stretchColumns="*"
         >
 
         <TableRow
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
+
 
         </TableRow>
 
@@ -44,10 +47,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
-                android:text="@string/malop" />
+                android:text="@string/ma_sv" />
 
             <EditText
-                android:id="@+id/etIDClass"
+                android:id="@+id/etIDStudent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
@@ -64,10 +67,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
-                android:text="@string/tenlop" />
+                android:text="@string/ten_sv" />
 
             <EditText
-                android:id="@+id/etNameClass"
+                android:id="@+id/etNameStudent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
@@ -82,52 +85,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/giobatdau"
                 android:textColor="@color/dark_blue"
-                android:paddingTop="@dimen/activity_horizontal_padding"/>
-
-
+                android:text="@string/sodienthoai" />
 
             <EditText
-                android:id="@+id/etStart"
-                android:layout_width="207dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none"
-
-                android:focusable="false"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:hint="Choose the time"
-                android:textColorHint="@color/dark_blue" />
-
-
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <TextView
+                android:id="@+id/etPhoneNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/gioketthuc"
                 android:textColor="@color/dark_blue"
-                android:paddingTop="@dimen/activity_horizontal_padding"/>
-
-
-            <EditText
-                android:id="@+id/etEnd"
-                android:layout_width="207dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:inputType="none"
-                android:focusable="false"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:hint="Choose the time"
-                android:textColorHint="@color/dark_blue" />
+                android:inputType="number"
+                android:ems="10" />
 
         </TableRow>
 
@@ -139,16 +106,86 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
-                android:text="@string/phonghoc"
-                android:paddingTop="@dimen/activity_horizontal_padding"/>
+                android:text="@string/email" />
 
             <EditText
-                android:id="@+id/etClassRoom"
+                android:id="@+id/etEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/dark_blue"
-                android:ems="10" >
-            </EditText>
+                android:inputType="textEmailAddress"
+                android:ems="10" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ngay_sinh"
+                android:textColor="@color/dark_blue"
+                android:paddingTop="@dimen/activity_horizontal_padding"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <EditText
+                    android:id="@+id/etBirthdayStudent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_blue"
+                    android:enabled="false"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:layout_width="@dimen/width_image_button"
+                    android:layout_height="@dimen/height_image_button"
+                    android:src="@drawable/ic_calendar"
+                    android:scaleType="fitXY"
+                    android:background="@color/white"
+                    android:adjustViewBounds="true"
+                    android:onClick="showDatePickerDialog"/>
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_blue"
+                android:text="@string/gioitinh"
+                android:paddingTop="@dimen/activity_horizontal_padding"/>
+
+            <RadioGroup
+                android:id="@+id/radioGroupStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/radMaleStudent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:textColor="@color/dark_blue"
+                    android:text="@string/nam" />
+
+                <RadioButton
+                    android:id="@+id/radFemaleStudent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_blue"
+                    android:text="@string/nu" />
+            </RadioGroup>
+
         </TableRow>
 
         <TableRow
@@ -159,13 +196,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
                 <Button
                     android:id="@+id/btnClear"
-                    android:background="@color/teal_dark_blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/light_orange"
+                    android:background="@color/teal_dark_blue"
                     android:onClick="clear"
                     android:text="@string/xoa_trang"
                     android:layout_weight="1"
@@ -182,7 +220,7 @@
                 android:textColor="@color/light_orange"
                 android:background="@color/teal_dark_blue"
                 android:onClick="save"
-                android:text="@string/luulop" />
+                android:text="@string/luu_sv" />
 
         </TableRow>
 
@@ -197,23 +235,34 @@
 <!--                android:layout_height="wrap_content"-->
 <!--                >-->
 <!--                <Button-->
-<!--                    android:id="@+id/btnThongBao"-->
-<!--                    android:background="@color/teal_700"-->
+<!--                    android:id="@+id/btnCall"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
-<!--                    android:textColor="@color/teal_700"-->
-<!--                    android:onClick="navigateToEmail"-->
-<!--                    android:text="@string/thong_bao"-->
+<!--                    android:textColor="@color/colorWhite"-->
+<!--                    android:background="@color/colorBlue"-->
+<!--                    android:onClick="call"-->
+<!--                    android:text="@string/goidienchohs"-->
 <!--                    android:layout_weight="1"-->
 <!--                    />-->
+
 <!--                <TextView-->
 <!--                    android:layout_width="@dimen/activity_horizontal_padding"-->
 <!--                    android:layout_height="wrap_content" />-->
 <!--            </LinearLayout>-->
 
-
+<!--            <Button-->
+<!--                android:id="@+id/btnMess"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/colorWhite"-->
+<!--                android:background="@color/colorBlue"-->
+<!--                android:visibility="invisible"-->
+<!--                android:onClick="mess"-->
+<!--                android:text="@string/nhantinchohs" />-->
 
 <!--        </TableRow>-->
     </TableLayout>
+
+
 
 </RelativeLayout>

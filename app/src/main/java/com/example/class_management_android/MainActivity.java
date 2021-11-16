@@ -3,7 +3,6 @@ package com.example.class_management_android;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 3:
                         // When id is 3, initialize home fragment
-                        fragment = new ClassroomListFragment();
+                        fragment = new ClassroomsListFragment();
                         break;
                     case 4:
                         // When id is 4, initialize about fragment
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set notification count
-        bottomNavigation.setCount(1, "10");
+//        bottomNavigation.setCount(1, "3");
         // Set home fragment initially selected
         bottomNavigation.show(3, true);
 

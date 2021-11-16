@@ -18,7 +18,7 @@ import com.example.class_management_android.model.Classroom;
 
 import java.util.ArrayList;
 import java.util.List;
-public class ClassroomListFragment extends Fragment implements SearchView.OnQueryTextListener
+public class ClassroomsListFragment extends Fragment implements SearchView.OnQueryTextListener
 {
     // variables
     private ListView lvListClassroom;
@@ -36,7 +36,6 @@ public class ClassroomListFragment extends Fragment implements SearchView.OnQuer
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditClassroomActivity.class);
                 startActivity(i);
-                Toast.makeText(getActivity().getApplicationContext(),"you are adding an classroom item", Toast.LENGTH_SHORT).show();
             }
         });
         lvListClassroom = (ListView) v.findViewById(R.id.lvListCLassManagers);
@@ -62,18 +61,14 @@ public class ClassroomListFragment extends Fragment implements SearchView.OnQuer
         mAdapter.notifyDataSetChanged();
     }
 
-    private void addEventListener()
-    {
+    private void addEventListener() {
         lvListClassroom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
-            {
-//                Classroom classManager = mListClassroom.get(position);
-//                Intent i = new Intent(getActivity(), ListStudents.class);
-//                i.putExtra(DbClassManagerHelper.COLUMN_CLASS_ID, classManager.getClassID());
-//                startActivity(i);
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "you clicked classroom item with onItemShortClick", Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Classroom classroom = mListClassroom.get(position);
+                Intent i = new Intent(getActivity(), StudentsListActivity.class);
+                i.putExtra(DbClassroomHelper.COLUMN_ID, classroom.getId());
+                startActivity(i);
             }
         });
         lvListClassroom.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -85,8 +80,6 @@ public class ClassroomListFragment extends Fragment implements SearchView.OnQuer
                     i.putExtra(DbClassroomHelper.COLUMN_ID, classroom.getId());
                     startActivity(i);
                 }
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "you clicked classroom item with onItemLongClick", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

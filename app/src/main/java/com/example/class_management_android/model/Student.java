@@ -1,29 +1,26 @@
 package com.example.class_management_android.model;
 
-public class Student
-{
+public class Student {
+
     private String id;
     private String name;
     private String birthday;
     private int gender;
-    private String class_id;
-    private String phone_number;
+    private String classID;
+    private String phoneNumber;
     private String email;
-
-    public Student()
-    {
+    public Student() {
 
     }
 
-    public Student(String id, String name, String birthday, int gender, String class_id, String phone_number, String email)
-    {
+    public Student(String id, String name, String birthday, int gender,String phoneNumber, String email,String classID) {
         this.id = id;
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
-        this.class_id = class_id;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.email = email;
+        this.classID = classID;
     }
 
     public String getId() {
@@ -43,7 +40,7 @@ public class Student
     }
 
     public String getBirthday() {
-        return this.birthday;
+        return birthday;
     }
 
     public void setBirthday(String birthday) {
@@ -51,40 +48,34 @@ public class Student
     }
 
     public int getGender() {
-        return this.gender;
+        return gender;
     }
 
     public void setGender(int gender) {
         this.gender = gender;
     }
 
-    public String getClassID()
-    {
-        return this.class_id;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setClassID(String class_id)
-    {
-        this.class_id = class_id;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getPhoneNumber()
-    {
-        return this.phone_number;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhoneNumber(String phone_number)
-    {
-        this.phone_number = phone_number;
-    }
-
-    public String getEmail()
-    {
-        return this.email;
-    }
-
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getClassId() {
+        return classID;
+    }
+
+    public void setClassId(String classID) {
+        this.classID = classID;
     }
 }
