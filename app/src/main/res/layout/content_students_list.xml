@@ -123,6 +123,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:onClick="addStudent"
-        android:src="@drawable/ic_adding_action" />
+        android:background="@drawable/circle_button_format"
+        android:src="@drawable/ic_rounded_add" />
 
 </RelativeLayout>
