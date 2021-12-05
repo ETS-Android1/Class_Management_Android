@@ -7,6 +7,7 @@ public class Classroom
     private String start_time;
     private String end_time;
     private String classroom_name;
+    private String week_day;
     private int total_student;
 
     public Classroom()
@@ -14,12 +15,13 @@ public class Classroom
 
     }
 
-    public Classroom(String id, String subject_name, String start_time, String end_time, String classroom_name, int total_student) {
+    public Classroom(String id, String subject_name, String start_time, String end_time, String classroom_name, String week_day,int total_student) {
         this.id = id;
         this.subject_name = subject_name;
         this.start_time = start_time;
         this.end_time = end_time;
         this.classroom_name = classroom_name;
+        this.week_day = week_day;
         this.total_student = total_student;
     }
 
@@ -72,6 +74,10 @@ public class Classroom
     {
         this.classroom_name = classroom_name;
     }
+
+    public String getWeekDay() { return this.week_day;}
+
+    public void setWeekDay(String week_day) { this.week_day = week_day; }
 
     public int getTotalStudent()
     {

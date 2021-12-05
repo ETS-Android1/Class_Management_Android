@@ -22,12 +22,13 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
     public static final String COLUMN_START_TIME = "start_time";
     public static final String COLUMN_END_TIME = "end_time";
     public static final String COLUMN_CLASSROOM_NAME = "classroom_name";
+    public static final String COLUMN_WEEK_DAY = "week_day";
     public static final String COLUMN_TOTAL_STUDENT = "total_student";
 
     public static final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME
             + " (" + COLUMN_ID + " text primary key not null, " + COLUMN_SUBJECT_NAME + " text not null, "
             + COLUMN_START_TIME + " text not null, " + COLUMN_END_TIME + " text not null, "
-            + COLUMN_CLASSROOM_NAME + " text not null, " + COLUMN_TOTAL_STUDENT + " integer);";
+            + COLUMN_CLASSROOM_NAME + " text not null, " + COLUMN_WEEK_DAY + " text not null, " + COLUMN_TOTAL_STUDENT + " integer);";
     private static final String TAG = "DbzClassManagerHelper";
 
     // constructor
@@ -72,7 +73,7 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, new String[]{COLUMN_ID, COLUMN_SUBJECT_NAME, COLUMN_START_TIME,
-                        COLUMN_END_TIME, COLUMN_CLASSROOM_NAME, COLUMN_TOTAL_STUDENT},
+                        COLUMN_END_TIME, COLUMN_CLASSROOM_NAME, COLUMN_WEEK_DAY,COLUMN_TOTAL_STUDENT},
                 null, null, null, null, COLUMN_SUBJECT_NAME);
         if (c.moveToFirst()) {
             do {
@@ -81,8 +82,9 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
                 String startTime = c.getString(c.getColumnIndex(COLUMN_START_TIME));
                 String endTime = c.getString(c.getColumnIndex(COLUMN_END_TIME));
                 String classRoom = c.getString(c.getColumnIndex(COLUMN_CLASSROOM_NAME));
+                String weekDay = c.getString(c.getColumnIndex(COLUMN_WEEK_DAY));
                 int totalStudent = c.getInt(c.getColumnIndex(COLUMN_TOTAL_STUDENT));
-                Classroom classManager = new Classroom(classID,className,startTime,endTime,classRoom,totalStudent);
+                Classroom classManager = new Classroom(classID,className,startTime,endTime,classRoom,weekDay,totalStudent);
                 classroom.add(classManager);
             } while (c.moveToNext());
             c.close();
@@ -105,8 +107,9 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
             String startTime = c.getString(c.getColumnIndex(COLUMN_START_TIME));
             String endTime = c.getString(c.getColumnIndex(COLUMN_END_TIME));
             String classRoom = c.getString(c.getColumnIndex(COLUMN_CLASSROOM_NAME));
+            String weekDay = c.getString(c.getColumnIndex(COLUMN_WEEK_DAY));
             int totalStudent = c.getInt(c.getColumnIndex(COLUMN_TOTAL_STUDENT));
-            classroom = new Classroom(id,className,startTime,endTime,classRoom,totalStudent);
+            classroom = new Classroom(id,className,startTime,endTime,classRoom,weekDay,totalStudent);
         }
         else
             classroom = null;
@@ -126,6 +129,7 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
         values.put(COLUMN_START_TIME, classroom.getStartTime());
         values.put(COLUMN_END_TIME, classroom.getEndTime());
         values.put(COLUMN_CLASSROOM_NAME,classroom.getClassroomName());
+        values.put(COLUMN_WEEK_DAY,classroom.getWeekDay());
         values.put(COLUMN_TOTAL_STUDENT,classroom.getTotalStudent());
         SQLiteDatabase db = this.getWritableDatabase();
         ret = db.insert(TABLE_NAME, null, values);
@@ -143,6 +147,7 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
         values.put(COLUMN_START_TIME, classroom.getStartTime());
         values.put(COLUMN_END_TIME, classroom.getEndTime());
         values.put(COLUMN_CLASSROOM_NAME,classroom.getClassroomName());
+        values.put(COLUMN_WEEK_DAY,classroom.getWeekDay());
         values.put(COLUMN_TOTAL_STUDENT,classroom.getTotalStudent());
         SQLiteDatabase db = this.getWritableDatabase();
         ret = db.update(TABLE_NAME, values, COLUMN_ID + "=?", new String[]{classroom.getId()});
@@ -175,8 +180,9 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
                 String startTime = c.getString(c.getColumnIndex(COLUMN_START_TIME));
                 String endTime = c.getString(c.getColumnIndex(COLUMN_END_TIME));
                 String classRoom = c.getString(c.getColumnIndex(COLUMN_CLASSROOM_NAME));
+                String weekDay = c.getString(c.getColumnIndex(COLUMN_WEEK_DAY));
                 int totalStudent = c.getInt(c.getColumnIndex(COLUMN_TOTAL_STUDENT));
-                Classroom classroom = new Classroom(classID,className,startTime,endTime,classRoom,totalStudent);
+                Classroom classroom = new Classroom(classID,className,startTime,endTime,classRoom,weekDay,totalStudent);
                 classrooms.add(classroom);
             } while (c.moveToNext());
         }
