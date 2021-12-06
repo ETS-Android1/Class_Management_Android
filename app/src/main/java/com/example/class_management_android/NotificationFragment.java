@@ -135,12 +135,16 @@ public class NotificationFragment extends android.app.Fragment {
     }
 
     public void updateClassroomDay(){
-        if(listClassroomDay.size() != 0){
+        if(listClassroomDay.size() > 0){
             textView.setText(" ");
             mAdapter = new ClassroomNotificationAdapter(this.getActivity(), R.layout.classroom_row_notification, listClassroomDay);
             lvListClassroom.setAdapter(mAdapter);
         }else{
             textView.setText("No classes today");
+            if(mAdapter == null){
+                mAdapter = new ClassroomNotificationAdapter(this.getActivity(), R.layout.classroom_row_notification, listClassroomDay);
+                lvListClassroom.setAdapter(mAdapter);
+            }
         }
         mAdapter.notifyDataSetChanged();
     }
