@@ -87,7 +87,7 @@ public class NotificationFragment extends android.app.Fragment {
 
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        listClassroomDay = classroomDay1(mListClassroom, dayOfWeek);
+        listClassroomDay = sortByTimeStart(classroomDay1(mListClassroom, dayOfWeek));
         updateClassroomDay();
         addEventListener();
 
@@ -112,7 +112,7 @@ public class NotificationFragment extends android.app.Fragment {
                                 // Add 1 in month because month
                                 // index is start with 0
                                 listClassroomDay.clear();
-                                listClassroomDay = classroomDay1(mListClassroom, dayOfWeek);
+                                listClassroomDay = sortByTimeStart(classroomDay1(mListClassroom, dayOfWeek));
                                 updateClassroomDay();
 
                             }
@@ -204,4 +204,44 @@ public class NotificationFragment extends android.app.Fragment {
         }
         return  result;
     }
+
+    private  List<Classroom> sortByTimeStart(List<Classroom> classrooms){
+        int length = classrooms.size();
+        for(int i = 0; i < length - 1; i++){
+            int min = i;
+            for(int j = i + 1; j < length; j++){
+                if(convertTimeFromStringToInt(classrooms.get(j).getStartTime())
+                        < convertTimeFromStringToInt(classrooms.get(min).getStartTime())){
+                    min = j;
+                }
+            }
+            Classroom swap = classrooms.get(i);
+            classrooms.set(i, classrooms.get(min));
+            classrooms.set(min, swap);
+        }
+        return classrooms;
+    }
+
+    private int convertTimeFromStringToInt(String time){
+        int result = 0;
+        int length = time.length();
+        int index = time.indexOf(":");
+        if(index == 1){
+            result = result + (Character.getNumericValue(time.charAt(0)))*60;
+            if(length == 3){
+                result = result + Character.getNumericValue(time.charAt(2));
+            }else {
+                result = result + (Character.getNumericValue(time.charAt(2)))*10 + Character.getNumericValue(time.charAt(3));
+            }
+        }else{
+            result = result + (Character.getNumericValue(time.charAt(0))*10 + Character.getNumericValue(time.charAt(1)))*60;
+            if(length == 4){
+                result = result + Character.getNumericValue(time.charAt(3));
+            }else {
+                result = result + (Character.getNumericValue(time.charAt(3)))*10 + Character.getNumericValue(time.charAt(4));
+            }
+        }
+        return result;
+    }
+
 }
