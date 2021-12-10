@@ -15,7 +15,7 @@ import java.util.List;
 public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
 {
     public static final String DATABASE_NAME = "classroom_database";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String TABLE_NAME = "classrooms";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_SUBJECT_NAME = "class_name";
@@ -53,6 +53,14 @@ public class DbClassroomHelper extends SQLiteOpenHelper implements DbHelper
         onCreate(db);
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.onDowngrade(db, oldVersion, newVersion);
+        Log.w(TAG, "Downgrade the database from " + newVersion + " to "
+                + oldVersion + ", all the data has been destroyed!");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
                         // =======================================================
                         // =====IMPLEMENT FUNCTIONS IN THE DBHELPER INTERFACE=====
                         // =======================================================
