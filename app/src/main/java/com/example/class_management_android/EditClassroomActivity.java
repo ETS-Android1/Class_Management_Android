@@ -27,7 +27,7 @@ import java.util.Calendar;
 public class EditClassroomActivity extends AppCompatActivity
 {
     private TextView tvTitle;
-    private EditText etID, etName, etStart, etEnd, etRoom;
+    private EditText etID, etName, etStart, etEnd, etRoom, etWeekDay;
     private String mId;
 
     @Override
@@ -52,6 +52,7 @@ public class EditClassroomActivity extends AppCompatActivity
         etStart = (EditText) findViewById(R.id.etStart);
         etEnd = (EditText) findViewById(R.id.etEnd);
         etRoom = (EditText) findViewById(R.id.etClassRoom);
+        etWeekDay = (EditText) findViewById(R.id.etWeekDay);
         mId = getIntent().getStringExtra(DbClassroomHelper.COLUMN_ID);
         if (mId == null) {
             // ADD MODE
@@ -69,8 +70,44 @@ public class EditClassroomActivity extends AppCompatActivity
                 etStart.setText(classroom.getStartTime());
                 etEnd.setText(classroom.getEndTime());
                 etRoom.setText(classroom.getClassroomName());
+                etWeekDay.setText(classroom.getWeekDay());
             }
         }
+
+        etWeekDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // setup the alert builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditClassroomActivity.this);
+                builder.setTitle("Choose a weekday");
+                // add a list
+                String[] weekdays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+                builder.setItems(weekdays, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: etWeekDay.setText("Monday");
+                            break;
+                            case 1: etWeekDay.setText("Tuesday");
+                            break;
+                            case 2: etWeekDay.setText("Wednesday");
+                            break;
+                            case 3: etWeekDay.setText("Thursday");
+                            break;
+                            case 4: etWeekDay.setText("Friday");
+                            break;
+                            case 5: etWeekDay.setText("Saturday");
+                            break;
+                            case 6: etWeekDay.setText("Sunday");
+                            break;
+                        }
+                    }
+                });
+                // create and show the alert dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
         etStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -188,6 +225,7 @@ public class EditClassroomActivity extends AppCompatActivity
         classroom.setStartTime(etStart.getText().toString());
         classroom.setEndTime(etEnd.getText().toString());
         classroom.setClassroomName(etRoom.getText().toString());
+        classroom.setWeekDay(etWeekDay.getText().toString());
         DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
         if (dbHelper.add(classroom) > 0)
         {
@@ -223,6 +261,7 @@ public class EditClassroomActivity extends AppCompatActivity
         classroom.setStartTime(etStart.getText().toString());
         classroom.setEndTime(etEnd.getText().toString());
         classroom.setClassroomName(etRoom.getText().toString());
+        classroom.setWeekDay(etWeekDay.getText().toString());
         DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
         if (dbHelper.update(classroom) > 0) {
             showToastMessage(getString(R.string.saved));

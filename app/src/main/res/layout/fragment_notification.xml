@@ -4,15 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NotificationFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Notification"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:orientation="vertical">
+
+        <CalendarView
+            android:id="@+id/calendar"
+            android:firstDayOfWeek="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></CalendarView>
+        <TextView
+            android:id="@+id/tvClassDay"
+            android:text=" "
+            android:textSize="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"></TextView>
+        <ListView
+            android:id="@+id/lvListClassNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:dividerHeight="5dp"
+            android:divider="@color/white"></ListView>
+    </LinearLayout>
+
+
 
 
 </FrameLayout>
