@@ -58,15 +58,18 @@
         <entry key="..\:/Users/Vostro 5568/AndroidStudioProjects/Class_Management_Android/app/src/main/res/layout/fragment_notification.xml" value="0.22447916666666667" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable-mdpi/layout_bg.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2375" />
+        <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/border.xml" value="0.26205128205128203" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/circle_button_format.xml" value="0.26614583333333336" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_about.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_back_action.xml" value="0.2375" />
+        <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.26614583333333336" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_bottom_bar_classroom.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_calendar.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_home.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_notification.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/ic_rounded_add.xml" value="0.2375" />
+        <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/my_custom_background.xml" value="0.26614583333333336" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/normal.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/pressed.xml" value="0.2375" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/drawable/round_button_format.xml" value="0.2375" />
@@ -80,7 +83,7 @@
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/content_edit_classroom.xml" value="0.264" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/content_edit_student.xml" value="0.17300724637681159" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/content_students_list.xml" value="0.17300724637681159" />
-        <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/fragment_about.xml" value="0.17300724637681159" />
+        <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/fragment_about.xml" value="0.264" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/fragment_classroom_list.xml" value="0.17300724637681159" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/fragment_home.xml" value="0.17300724637681159" />
         <entry key="..\:/btl_android/Class_Management_Android/app/src/main/res/layout/fragment_notification.xml" value="0.264" />
@@ -99,7 +102,7 @@
   <component name="VisualizationToolProject">
     <option name="state">
       <ProjectState>
-        <option name="scale" value="0.22" />
+        <option name="scale" value="0.22916666666666666" />
       </ProjectState>
     </option>
   </component>
