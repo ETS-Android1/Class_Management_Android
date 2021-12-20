@@ -3,7 +3,7 @@ package com.example.class_management_android;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +11,7 @@ import android.widget.AdapterView;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.class_management_android.adapter.ClassroomAdapter;
 import com.example.class_management_android.adapter.ClassroomNotificationAdapter;
 import com.example.class_management_android.database.DbClassroomHelper;
 import com.example.class_management_android.model.Classroom;

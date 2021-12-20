@@ -3,12 +3,11 @@ package com.example.class_management_android;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +18,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.class_management_android.database.DbClassroomHelper;
-import com.example.class_management_android.database.DbStudentHelper;
 import com.example.class_management_android.model.Classroom;
 
 import java.util.Calendar;
