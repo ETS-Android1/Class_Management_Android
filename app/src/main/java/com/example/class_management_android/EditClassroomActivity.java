@@ -219,11 +219,27 @@ public class EditClassroomActivity extends AppCompatActivity
             etName.requestFocus();
             return;
         }
+        String etStartTime = etStart.getText().toString();
+        if (etStartTime.length() == 0)
+        {
+            etStart.setError("?");
+            etStart.requestFocus();
+            return;
+        }
+        String etEndTime = etEnd.getText().toString();
+        if (etEndTime.length() == 0)
+        {
+            etEnd.setError("?");
+            etEnd.requestFocus();
+            return;
+        }
+
+
         Classroom classroom = new Classroom();
         classroom.setId(mId);
         classroom.setSubjectName(name);
-        classroom.setStartTime(etStart.getText().toString());
-        classroom.setEndTime(etEnd.getText().toString());
+        classroom.setStartTime(etStartTime);
+        classroom.setEndTime(etEndTime);
         classroom.setClassroomName(etRoom.getText().toString());
         classroom.setWeekDay(etWeekDay.getText().toString());
         DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);

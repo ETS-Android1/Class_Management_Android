@@ -148,12 +148,21 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
 
 
     @Override
+    // based on search icon clicking in a virtual keyboard
     public boolean onQueryTextSubmit(String query)
     {
+//        mSearchText = query;
+//        DbStudentHelper dbHelper = new DbStudentHelper(this, null);
+//        mListStudents.clear();
+//        mListStudents.addAll(dbHelper.searchStudent(query,classID));
+//        mAdapter.notifyDataSetChanged();
+//        return true;
         return false;
     }
 
     @Override
+    // based on typing text to searching automatically in "Insert name" on action bar
+    // If newText is NULL, ignore this func
     public boolean onQueryTextChange(String newText)
     {
         mSearchText = newText;
@@ -163,5 +172,4 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
         mAdapter.notifyDataSetChanged();
         return true;
     }
-
 }
