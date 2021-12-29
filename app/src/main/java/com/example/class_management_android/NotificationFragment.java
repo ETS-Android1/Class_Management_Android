@@ -113,7 +113,7 @@ public class NotificationFragment extends android.app.Fragment {
         lvListClassroom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Classroom classroom = mListClassroom.get(position);
+                Classroom classroom = listClassroomDay.get(position);
                 Intent i = new Intent(getActivity(), StudentsListActivity.class);
                 i.putExtra(DbClassroomHelper.COLUMN_ID, classroom.getId());
                 startActivity(i);
@@ -123,7 +123,7 @@ public class NotificationFragment extends android.app.Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
                 if (position >= 0) {
-                    Classroom classroom = mListClassroom.get(position);
+                    Classroom classroom = listClassroomDay.get(position);
                     Intent i = new Intent(getActivity(), EditClassroomActivity.class);
                     i.putExtra(DbClassroomHelper.COLUMN_ID, classroom.getId());
                     startActivity(i);
