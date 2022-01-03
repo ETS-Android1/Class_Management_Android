@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,11 +22,21 @@ import android.widget.Toast;
 import com.example.class_management_android.adapter.StudentAdapter;
 import com.example.class_management_android.database.DbClassroomHelper;
 import com.example.class_management_android.database.DbStudentHelper;
+import com.example.class_management_android.model.Classroom;
 import com.example.class_management_android.model.Student;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class StudentsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, LifecycleObserver
 {
@@ -35,16 +44,20 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
     private List<Student> mListStudents;
     private StudentAdapter mAdapter;
     private TextView tvStudentCount;
-    public static String mSearchText = null;
-    String classID;
-    Student sv;
+    private String classID;
+    private List<Student> searchList;
 
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseUser acct;
+
+    private Boolean switchClik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_list);
-        classID = getIntent().getStringExtra(DbClassroomHelper.COLUMN_ID);
+        classID = getIntent().getStringExtra("idClassroomClick");
 
         // calling the action bar
         ActionBar actionBar = getSupportActionBar();
@@ -56,21 +69,45 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
         actionBar.setTitle("Classroom's Code: " + classID);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1E313E"))); // dark_blue
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        acct = mAuth.getCurrentUser();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("student");
+
         tvStudentCount =(TextView) findViewById(R.id.tvStudentCount);
         lvListStudents = (ListView) findViewById(R.id.lvListStudents);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mListStudents = new ArrayList<>();
+        searchList = new ArrayList<>();
+        switchClik = false;
+
         mAdapter = new StudentAdapter(this, R.layout.student_row, mListStudents);
         lvListStudents.setAdapter(mAdapter);
-        refreshListStudentsData(classID);
         addEventListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("StudentsListActivity.classID = " + classID);
-        refreshListStudentsData(classID);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mListStudents.clear();
+                for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).child(classID).getChildren()){
+                    Student student = dataSnapshot.getValue(Student.class);
+                    mListStudents.add(student);
+                }
+                mAdapter.notifyDataSetChanged();
+                tvStudentCount.setText(" " + Integer.toString(mListStudents.size()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
@@ -91,35 +128,15 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
                 this.finish();
                 return true;
             }
-            case R.id.attendance: {
-                attendancerandom();
-                return true;
-            }
         }
-
         return super.onOptionsItemSelected(item);
     }
-    private void attendancerandom(){
-        Random generator = new Random();
-        int a=generator.nextInt(mListStudents.size());
-        sv=mListStudents.get(a);
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle(R.string.diemdanh).setMessage(sv.getName()+" "+sv.getId());
-        b.create().show();
-    }
 
-    public void refreshListStudentsData(String classID) {
-        DbStudentHelper dbStudentHelper = new DbStudentHelper(this, null);
-        mListStudents.clear();
-        mListStudents.addAll(dbStudentHelper.getListInClass(classID));
-        tvStudentCount.setText(" " + Integer.toString(mListStudents.size()));
-        mAdapter.notifyDataSetChanged();
-    }
 
     public void addStudent(View v)
     {
         Intent i = new Intent(this, EditStudentActivity.class);
-        i.putExtra(DbStudentHelper.COLUMN_CLASS_ID, classID);
+        i.putExtra("idClassroom", classID);
         startActivity(i);
     }
 
@@ -129,64 +146,46 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id)
             {
-                Student student = mListStudents.get(position);
+                Student student;
+                if(switchClik == false){
+                    student = mListStudents.get(position);
+                }else{
+                    student = searchList.get(position);
+                }
                 Intent i = new Intent(StudentsListActivity.this, EditStudentActivity.class);
-                i.putExtra(DbStudentHelper.COLUMN_ID, student.getId());
-                i.putExtra(DbStudentHelper.COLUMN_CLASS_ID, student.getClassId());
+                i.putExtra("idStudent", student.getId());
+                i.putExtra("idClassroom", classID);
                 startActivity(i);
                 return true;
+
             }
         });
     }
 
-    // delete a student in db
-    private void deleteStudent(final String id)
-    {
-
-        AlertDialog.Builder b = new AlertDialog.Builder(this);
-        b.setTitle(R.string.delete).setMessage(getString(R.string.delete_student_message) + " - Student's code: " + id + " ?")
-                .setIcon(android.R.drawable.ic_delete)
-                .setNegativeButton(R.string.no, null)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        DbStudentHelper dbStudentHelper = new DbStudentHelper(StudentsListActivity.this, null);
-                        if (dbStudentHelper.delete(id) > 0) {
-                            Toast.makeText(StudentsListActivity.this, getString(R.string.deleted), Toast.LENGTH_LONG).show();
-                            refreshListStudentsData(classID);
-                        } else {
-                            Toast.makeText(StudentsListActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-        b.create().show();
-    }
-
-
 
     @Override
-    // based on search icon clicking in a virtual keyboard
     public boolean onQueryTextSubmit(String query)
     {
-//        mSearchText = query;
-//        DbStudentHelper dbHelper = new DbStudentHelper(this, null);
-//        mListStudents.clear();
-//        mListStudents.addAll(dbHelper.searchStudent(query,classID));
-//        mAdapter.notifyDataSetChanged();
-//        return true;
         return false;
     }
 
     @Override
-    // based on typing text to searching automatically in "Insert name" on action bar
-    // If newText is NULL, ignore this func
     public boolean onQueryTextChange(String newText)
     {
-        mSearchText = newText;
-        DbStudentHelper dbHelper = new DbStudentHelper(this, null);
-        mListStudents.clear();
-        mListStudents.addAll(dbHelper.searchStudent(newText,classID));
-        mAdapter.notifyDataSetChanged();
+        searchList.clear();
+        if(newText.length() != 0){
+            switchClik = true;
+            for(Student i : mListStudents){
+                if(i.getName().toLowerCase().contains(newText.toLowerCase())){
+                    searchList.add(i);
+                }
+            }
+            lvListStudents.setAdapter(new StudentAdapter(this, R.layout.student_row, searchList));
+        }else {
+            switchClik = false;
+            lvListStudents.setAdapter(new StudentAdapter(this, R.layout.student_row, mListStudents));
+        }
         return true;
     }
+
 }

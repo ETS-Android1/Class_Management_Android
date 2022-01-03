@@ -14,17 +14,17 @@ import java.util.List;
 
 public class ClassroomAdapter extends ArrayAdapter<Classroom>
 {
-    private Context m_context;
-    private int m_resource_id;
-    private List<Classroom> m_list_classrooms; // monitor
+    private Context mContext;
+    private int mResourceId;
+    private List<Classroom> mListClassrooms;
 
     // constructor
     public ClassroomAdapter(@NonNull Context context, int resource, @NonNull List<Classroom> objects)
     {
         super(context, resource, objects);
-        this.m_context = context;
-        this.m_resource_id = resource;
-        this.m_list_classrooms = objects;
+        this.mContext = context;
+        this.mResourceId = resource;
+        this.mListClassrooms = objects;
     }
 
     // create a holder to hold view objects in the list view
@@ -40,7 +40,7 @@ public class ClassroomAdapter extends ArrayAdapter<Classroom>
         ClassroomAdapter.viewHolder holder;
         if(convertView == null || convertView.getTag() == null)
         {
-            convertView = View.inflate(this.m_context,this.m_resource_id,null);
+            convertView = View.inflate(this.mContext,this.mResourceId,null);
             holder = new ClassroomAdapter.viewHolder();
             holder.tvOrderClass = (TextView) convertView.findViewById(R.id.tvOrderClass);
             holder.tvIdClass = (TextView) convertView.findViewById(R.id.tvIdClass);
@@ -51,7 +51,7 @@ public class ClassroomAdapter extends ArrayAdapter<Classroom>
         }
         else
             holder = (ClassroomAdapter.viewHolder) convertView.getTag();
-        Classroom classroom = this.m_list_classrooms.get(position);
+        Classroom classroom = this.mListClassrooms.get(position);
         holder.tvOrderClass.setText(String.valueOf(position + 1));
         holder.tvIdClass.setText(classroom.getId());
         holder.tvNameClass.setText(classroom.getSubjectName());

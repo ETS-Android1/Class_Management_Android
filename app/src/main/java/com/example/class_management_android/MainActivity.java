@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         // Assign variable
         bottomNavigation = findViewById(R.id.bottom_navigation);
         // Add menu item
-        bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_notification));
+        bottomNavigation.add(new MeowBottomNavigation.Model(1, R.drawable.ic_baseline_calendar_today_24));
         bottomNavigation.add(new MeowBottomNavigation.Model(2, R.drawable.ic_home));
         bottomNavigation.add(new MeowBottomNavigation.Model(3, R.drawable.ic_bottom_bar_classroom));
         bottomNavigation.add(new MeowBottomNavigation.Model(4, R.drawable.ic_about));

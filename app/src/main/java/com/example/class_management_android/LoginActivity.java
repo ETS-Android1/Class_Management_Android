@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,11 +28,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity
 {
-    private EditText edt_user_name;
-    private EditText edt_password;
-    private Button btn_login;
+    private EditText edtEmail;
+    private EditText edtPassword;
+    private Button btnLogin;
+    private TextView tvAccount;
 
-    private SignInButton btn_google_sign;
+    private SignInButton btnGoogleLogin;
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
@@ -43,7 +45,7 @@ public class LoginActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // google signin
-        btn_google_sign = (SignInButton) findViewById(R.id.sign_in_button_google);
+        btnGoogleLogin = (SignInButton) findViewById(R.id.sign_in_button_google);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -57,23 +59,31 @@ public class LoginActivity extends AppCompatActivity
 
         // hide The Default Actionbar
         getSupportActionBar().hide();
-        edt_user_name = (EditText)findViewById(R.id.edtUserName);
-        edt_password = (EditText)findViewById(R.id.edtPasswords);
-        btn_login = (Button)findViewById(R.id.btnLogin);
-        btn_login.setOnClickListener(new View.OnClickListener()
+        tvAccount = (TextView)findViewById(R.id.tvAccount);
+        edtEmail = (EditText)findViewById(R.id.edtEmail);
+        edtPassword = (EditText)findViewById(R.id.edtPassword);
+        btnLogin = (Button)findViewById(R.id.btnLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                checkLogin(edt_user_name.getText().toString(), edt_password.getText().toString());
+                checkLogin();
             }
         });
-        btn_google_sign.setOnClickListener(new View.OnClickListener()
+        btnGoogleLogin.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
                 signIn();
+            }
+        });
+
+        tvAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
     }
@@ -131,23 +141,38 @@ public class LoginActivity extends AppCompatActivity
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void checkLogin(String _user_name, String _password)
+    private void checkLogin()
     {
-        if (_user_name.isEmpty() || _password.isEmpty())
-        {
-            Toast.makeText(LoginActivity.this, "Username or password is empty!", Toast.LENGTH_LONG).show();
+        String email = edtEmail.getText().toString();
+        if(email.length() == 0){
+            edtEmail.setError("?");
+            edtEmail.requestFocus();
             return;
         }
-        if ((_user_name.equals("admin")) && (_password.equals("admin")))
-        {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            Toast.makeText(LoginActivity.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-            startActivity(intent);
-        }
-        else
-        {
-            Toast.makeText(LoginActivity.this, "Incorrect account or password!", Toast.LENGTH_SHORT).show();
+        String password = edtPassword.getText().toString();
+        if(password.length() == 0){
+            edtPassword.setError("?");
+            edtPassword.requestFocus();
             return;
         }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(LoginActivity.this, "Login", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Login failed. Please check " +
+                                            "your email or password",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
