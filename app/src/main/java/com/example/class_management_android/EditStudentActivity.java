@@ -6,9 +6,12 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,11 +22,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.class_management_android.database.DbStudentHelper;
+import com.example.class_management_android.model.Classroom;
 import com.example.class_management_android.model.Student;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -36,6 +52,12 @@ public class EditStudentActivity extends AppCompatActivity
     private String mId;
     private String classID;
     private static String TAG = "EditStudentActivity";
+    private List<Student> mListStudents;
+
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseUser acct;
     private DatePickerDialog.OnDateSetListener callback = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -62,6 +84,16 @@ public class EditStudentActivity extends AppCompatActivity
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1E313E"))); // dark_blue
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        acct = mAuth.getCurrentUser();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("student");
+
+
+        mListStudents = new ArrayList<>();
         tvTitle = (TextView) findViewById(R.id.tvTitleStudent);
         etID = (EditText) findViewById(R.id.etIDStudent);
         etName = (EditText) findViewById(R.id.etNameStudent);
@@ -70,34 +102,51 @@ public class EditStudentActivity extends AppCompatActivity
         etEmail = (EditText) findViewById(R.id.etEmail);
         radMale = (RadioButton) findViewById(R.id.radMaleStudent);
         radFemale = (RadioButton) findViewById(R.id.radFemaleStudent);
-        classID = getIntent().getStringExtra(DbStudentHelper.COLUMN_CLASS_ID);
-        mId = getIntent().getStringExtra(DbStudentHelper.COLUMN_ID);
-        System.out.println("EditStudentActivity.classID: " + classID);
-        System.out.println("EditStudentActivity.mID: " + mId);
-        if (mId == null) {
-            // ADD MODE
-            setDefaultInfo();
-        } else {
-            // EDIT MODE
-            DbStudentHelper dbHelper = new DbStudentHelper(this, null);
-            Student student = dbHelper.get(mId);
-            if (student != null) {
-                tvTitle.setText(R.string.update_student);
-                etID.setText(student.getId());
-                etID.setEnabled(false);
-                etName.setText(student.getName());
-                etName.requestFocus();
-                etPhoneNumber.setText(student.getPhoneNumber());
-                etEmail.setText(student.getEmail());
-                etBirthday.setText(student.getBirthday());
-                if (student.getGender() == 0)
-                    radFemale.setChecked(true);
-                else
-                    radMale.setChecked(true);
-            }
-        }
+        classID = getIntent().getStringExtra("idClassroom");
+        mId = getIntent().getStringExtra("idStudent");
+
 
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.v("1", "da vao trong");
+                mListStudents.clear();
+                for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).child(classID).getChildren()){
+                    Student student = dataSnapshot.getValue(Student.class);
+                    mListStudents.add(student);
+                }
+                if (mId == null) {
+                    // ADD MODE
+                    setDefaultInfo();
+                } else {
+                    // EDIT MODE
+                    Student student = getStudent(mListStudents, mId);
+                    tvTitle.setText(R.string.update_student);
+                    etID.setText(student.getId());
+                    etID.setEnabled(false);
+                    etName.setText(student.getName());
+                    etName.requestFocus();
+                    etPhoneNumber.setText(student.getPhoneNumber());
+                    etEmail.setText(student.getEmail());
+                    etBirthday.setText(student.getBirthday());
+                    if (student.getGender() == 0)
+                        radFemale.setChecked(true);
+                    else
+                        radMale.setChecked(true);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
     // create a menu for adding and editing mode
     @Override
@@ -139,13 +188,8 @@ public class EditStudentActivity extends AppCompatActivity
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DbStudentHelper dbStudentHelper = new DbStudentHelper(EditStudentActivity.this, null);
-                        if (dbStudentHelper.delete(id) > 0) {
-                            showToastMessage(getString(R.string.deleted));
-                            EditStudentActivity.this.finish();
-                        } else {
-                            showToastMessage(getString(R.string.error));
-                        }
+                        mDatabase.child(acct.getUid()).child(classID).child(mId).setValue(null);
+                        Toast.makeText(EditStudentActivity.this, "Deleted", Toast.LENGTH_LONG).show();
                     }
                 });
         b.create().show();
@@ -219,32 +263,28 @@ public class EditStudentActivity extends AppCompatActivity
         student.setClassId(classID);
         student.setPhoneNumber(phoneNumber);
         student.setEmail(email);
-
-        System.out.println("the saved student' infor: " +
-                "id: " + student.getId() + "; id_class: " + student.getClassId()
-                + "; name: " + student.getName() + "; gender: " + student.getGender()
-                + "; phone_num: " + student.getPhoneNumber()
-                + "; email: " + student.getEmail() + "; birthday: " + student.getBirthday());
-
-        DbStudentHelper dbHelper = new DbStudentHelper(this, null);
-
-
-        if (dbHelper.add(student) > 0) {
-            showToastMessage(getString(R.string.saved));
-            this.finish();
-        } else {
-            if (dbHelper.get(mId) != null)
-                showToastMessage(getString(R.string.student_exists));
-            else
-                showToastMessage(getString(R.string.error));
+        if(checkIdExits(mListStudents, mId)){
+            etID.setError("!");
+            etID.requestFocus();
+            Toast.makeText(this, "ID already exits", Toast.LENGTH_LONG).show();
+            return;
+        }else{
+            mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         }
     }
 
     private void updateStudent() {
-        String name = etName.getText().toString();
+        String mId = etID.getText().toString().trim();
+        if (mId.length() == 0) {
+            etID.setError("?");
+            etID.requestFocus();
+            return;
+        }
+        String name = etName.getText().toString().trim();
         String phoneNumber = etPhoneNumber.getText().toString();
         String email = etEmail.getText().toString();
-        if (name.trim().length() == 0) {
+        if (name.length() == 0) {
             etName.setError("?");
             etName.requestFocus();
             return;
@@ -255,21 +295,35 @@ public class EditStudentActivity extends AppCompatActivity
         student.setBirthday(getDateFormat(mBirthday));
         if (radMale.isChecked())
             student.setGender(1);
-        else
+        else{
             student.setGender(0);
         student.setClassId(classID);
         student.setPhoneNumber(phoneNumber);
         student.setEmail(email);
-
-        DbStudentHelper dbHelper = new DbStudentHelper(this, null);
-        if (dbHelper.update(student) > 0) {
-            showToastMessage(getString(R.string.updated));
-            this.finish();
-        } else {
-            showToastMessage(getString(R.string.error));
+        mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
+        Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
         }
     }
 
+    private Student getStudent( List<Student> listStudent ,String id){
+        Student result = new Student();
+        for(Student i : listStudent){
+            if(i.getId().equals(id)){
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private Boolean checkIdExits(List<Student> listStudent ,String id){
+        for(Student i : listStudent){
+            if(i.getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void showToastMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

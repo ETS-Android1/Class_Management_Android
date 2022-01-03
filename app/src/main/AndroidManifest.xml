@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Class_Management_Android">
         <activity
+            android:name=".SignupActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditStudentActivity"
             android:exported="false" />
         <activity
