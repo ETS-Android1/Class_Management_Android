@@ -131,6 +131,7 @@ public class NotificationFragment extends android.app.Fragment {
         mDatabaseClassroom.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mListClassroom.clear();
                 for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).getChildren()){
                     Classroom classroom = dataSnapshot.getValue(Classroom.class);
                     mListClassroom.add(classroom);
