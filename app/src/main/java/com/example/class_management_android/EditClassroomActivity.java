@@ -168,7 +168,6 @@ public class EditClassroomActivity extends AppCompatActivity
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.v("1", "da vao trong");
                 mListClassroom.clear();
                 for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).getChildren()){
                     Classroom classroom = dataSnapshot.getValue(Classroom.class);
@@ -197,19 +196,6 @@ public class EditClassroomActivity extends AppCompatActivity
 
             }
         });
-
-//        readData(new FirebaseCallBack() {
-//            @Override
-//            public void onCallback(List<Classroom> value) {
-//
-//            }
-//        });
-//
-//        Log.v("3", "da ra ngoai");
-//        Log.v("3.1", mListClassroom.size() +"");
-//        while (mListClassroom.size() == 0){
-//            return;
-//        }
     }
 
 

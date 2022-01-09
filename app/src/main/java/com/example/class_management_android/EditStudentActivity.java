@@ -114,7 +114,6 @@ public class EditStudentActivity extends AppCompatActivity
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.v("1", "da vao trong");
                 mListStudents.clear();
                 for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).child(classID).getChildren()){
                     Student student = dataSnapshot.getValue(Student.class);
