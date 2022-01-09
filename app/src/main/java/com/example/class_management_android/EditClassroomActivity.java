@@ -317,7 +317,6 @@ public class EditClassroomActivity extends AppCompatActivity
             Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         }
 
-        this.finish();
     }
 
     private void updateClassroom()
@@ -363,7 +362,6 @@ public class EditClassroomActivity extends AppCompatActivity
         mDatabase.child(acct.getUid()).child(classroom.getId()).setValue(classroom);
         Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
 
-        this.finish();
     }
 
     // show a message to delete a classroom in db with classroom's id
