@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.example.class_management_android.model.Student;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class StudentsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, LifecycleObserver
 {
@@ -35,6 +37,8 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
     private TextView tvStudentCount;
     public static String mSearchText = null;
     String classID;
+    Student sv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +91,21 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
                 this.finish();
                 return true;
             }
+            case R.id.attendance: {
+                attendancerandom();
+                return true;
+            }
         }
+
         return super.onOptionsItemSelected(item);
+    }
+    private void attendancerandom(){
+        Random generator = new Random();
+        int a=generator.nextInt(mListStudents.size());
+        sv=mListStudents.get(a);
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle(R.string.diemdanh).setMessage(sv.getName()+" "+sv.getId());
+        b.create().show();
     }
 
     public void refreshListStudentsData(String classID) {

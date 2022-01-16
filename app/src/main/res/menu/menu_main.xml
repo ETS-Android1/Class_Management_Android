@@ -7,4 +7,9 @@
         app:actionViewClass="android.widget.SearchView"
         android:title=""
         app:showAsAction="always" />
+    <item
+        android:id="@+id/attendance"
+        android:icon="@mipmap/ic_goingaunhien_foreground"
+        android:title=""
+        app:showAsAction="always" />
 </menu>
