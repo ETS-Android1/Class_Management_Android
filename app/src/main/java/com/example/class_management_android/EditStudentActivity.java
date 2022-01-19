@@ -188,7 +188,8 @@ public class EditStudentActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mDatabase.child(acct.getUid()).child(classID).child(mId).setValue(null);
-                        Toast.makeText(EditStudentActivity.this, "Deleted", Toast.LENGTH_LONG).show();
+                        showToastMessage("Deleted!");
+                        EditStudentActivity.this.finish();
                     }
                 });
         b.create().show();
@@ -262,14 +263,16 @@ public class EditStudentActivity extends AppCompatActivity
         student.setClassId(classID);
         student.setPhoneNumber(phoneNumber);
         student.setEmail(email);
-        if(checkIdExits(mListStudents, mId)){
+        if(checkIdExits(mListStudents, mId)) {
             etID.setError("!");
             etID.requestFocus();
-            Toast.makeText(this, "ID already exits", Toast.LENGTH_LONG).show();
+            showToastMessage("This ID has already existed!");
             return;
-        }else{
+        }
+        else {
             mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
-            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+            showToastMessage("Saved!");
+            this.finish();
         }
     }
 
@@ -294,13 +297,14 @@ public class EditStudentActivity extends AppCompatActivity
         student.setBirthday(getDateFormat(mBirthday));
         if (radMale.isChecked())
             student.setGender(1);
-        else{
+        else {
             student.setGender(0);
-        student.setClassId(classID);
-        student.setPhoneNumber(phoneNumber);
-        student.setEmail(email);
-        mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
-        Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
+            student.setClassId(classID);
+            student.setPhoneNumber(phoneNumber);
+            student.setEmail(email);
+            mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
+            showToastMessage("Updated!");
+            this.finish();
         }
     }
 

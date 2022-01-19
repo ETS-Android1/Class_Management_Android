@@ -296,11 +296,12 @@ public class EditClassroomActivity extends AppCompatActivity
         if(checkIdExits(mListClassroom, mId)){
             etID.setError("!");
             etID.requestFocus();
-            Toast.makeText(this, "ID already exits", Toast.LENGTH_LONG).show();
+            showToastMessage("This ID has already existed!");
             return;
         }else{
             mDatabase.child(acct.getUid()).child(classroom.getId()).setValue(classroom);
-            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
+            showToastMessage("Saved!");
+            this.finish();
         }
 
     }
@@ -346,8 +347,8 @@ public class EditClassroomActivity extends AppCompatActivity
         classroom.setClassroomName(etRoom.getText().toString());
         classroom.setWeekDay(weekDay);
         mDatabase.child(acct.getUid()).child(classroom.getId()).setValue(classroom);
-        Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
-
+        showToastMessage("Updated!");
+        this.finish();
     }
 
     // show a message to delete a classroom in db with classroom's id
@@ -363,7 +364,8 @@ public class EditClassroomActivity extends AppCompatActivity
                         mDatabase.child(acct.getUid()).child(mId).setValue(null);
                         mDatabaseStudent.child(acct.getUid()).child(mId).setValue(null);
                         mDatabaseAttendance.child(acct.getUid()).child(mId).setValue(null);
-                        Toast.makeText(EditClassroomActivity.this, "Deleted", Toast.LENGTH_LONG).show();
+                        showToastMessage("Deleted!");
+                        EditClassroomActivity.this.finish();
                     }
                 });
         b.create().show();

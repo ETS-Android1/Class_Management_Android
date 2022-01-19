@@ -22,7 +22,7 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         if (!setedBgrEffect)
         {
-            setupBgrEffect(v, container);
+//            setupBgrEffect(v, container);
             setedBgrEffect = true;
         }
 
