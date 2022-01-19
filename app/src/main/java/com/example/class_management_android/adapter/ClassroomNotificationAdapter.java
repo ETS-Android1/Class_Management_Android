@@ -2,7 +2,7 @@ package com.example.class_management_android.adapter;
 
 import com.example.class_management_android.R;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,17 +14,17 @@ import java.util.List;
 
 public class ClassroomNotificationAdapter extends ArrayAdapter<Classroom>
 {
-    private Context m_context;
-    private int m_resource_id;
-    private List<Classroom> m_list_classrooms; // monitor
+    private Context mContext;
+    private int mResourceId;
+    private List<Classroom> mListClassrooms;
 
     // constructor
     public ClassroomNotificationAdapter(@NonNull Context context, int resource, @NonNull List<Classroom> objects)
     {
         super(context, resource, objects);
-        this.m_context = context;
-        this.m_resource_id = resource;
-        this.m_list_classrooms = objects;
+        this.mContext = context;
+        this.mResourceId = resource;
+        this.mListClassrooms = objects;
     }
 
     // create a holder to hold view objects in the list view
@@ -40,7 +40,7 @@ public class ClassroomNotificationAdapter extends ArrayAdapter<Classroom>
         ClassroomNotificationAdapter.viewHolder holder;
         if(convertView == null || convertView.getTag() == null)
         {
-            convertView = View.inflate(this.m_context,this.m_resource_id,null);
+            convertView = View.inflate(this.mContext,this.mResourceId,null);
             holder = new ClassroomNotificationAdapter.viewHolder();
             holder.tvIdAndNameClass = (TextView) convertView.findViewById(R.id.tvIdAndNameClass);
             holder.tvTimeClassStart = (TextView) convertView.findViewById(R.id.tvTimeClassStart);
@@ -50,7 +50,7 @@ public class ClassroomNotificationAdapter extends ArrayAdapter<Classroom>
         }
         else
             holder = (ClassroomNotificationAdapter.viewHolder) convertView.getTag();
-        Classroom classroom = this.m_list_classrooms.get(position);
+        Classroom classroom = this.mListClassrooms.get(position);
         holder.tvIdAndNameClass.setText(classroom.getId() +" - "+ classroom.getSubjectName());
         holder.tvTimeClassStart.setText(classroom.getStartTime());
         holder.tvTimeClassEnd.setText(classroom.getEndTime());

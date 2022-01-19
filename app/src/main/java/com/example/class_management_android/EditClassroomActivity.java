@@ -6,10 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,16 +20,34 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.class_management_android.database.DbClassroomHelper;
-import com.example.class_management_android.database.DbStudentHelper;
 import com.example.class_management_android.model.Classroom;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class EditClassroomActivity extends AppCompatActivity
 {
     private TextView tvTitle;
     private EditText etID, etName, etStart, etEnd, etRoom, etWeekDay;
     private String mId;
+    private List<Classroom> mListClassroom;
+
+    private DatabaseReference mDatabaseStudent;
+    private DatabaseReference mDatabaseAttendance;
+    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+    private FirebaseUser acct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,6 +65,16 @@ public class EditClassroomActivity extends AppCompatActivity
         actionBar.setTitle("");
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1E313E"))); // dark_blue
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
+
+        acct = mAuth.getCurrentUser();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference("classroom");
+        mDatabaseStudent = FirebaseDatabase.getInstance().getReference("student");
+        mDatabaseAttendance = FirebaseDatabase.getInstance().getReference("attendance");
+
+        mListClassroom = new ArrayList<>();
         tvTitle = (TextView) findViewById(R.id.tvTitleClass);
         etID = (EditText) findViewById(R.id.etIDClass);
         etName = (EditText) findViewById(R.id.etNameClass);
@@ -53,26 +82,8 @@ public class EditClassroomActivity extends AppCompatActivity
         etEnd = (EditText) findViewById(R.id.etEnd);
         etRoom = (EditText) findViewById(R.id.etClassRoom);
         etWeekDay = (EditText) findViewById(R.id.etWeekDay);
-        mId = getIntent().getStringExtra(DbClassroomHelper.COLUMN_ID);
-        if (mId == null) {
-            // ADD MODE
-            etID.requestFocus();
-        } else {
-            // EDIT MODE
-            DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-            Classroom classroom = dbHelper.get(mId);
-            if (classroom != null) {
-                tvTitle.setText(R.string.update_class);
-                etID.setText(classroom.getId());
-                etID.setEnabled(false); // không cho phép sửa ID trong lúc edit
-                etName.setText(classroom.getSubjectName());
-                etName.requestFocus();
-                etStart.setText(classroom.getStartTime());
-                etEnd.setText(classroom.getEndTime());
-                etRoom.setText(classroom.getClassroomName());
-                etWeekDay.setText(classroom.getWeekDay());
-            }
-        }
+        mId = getIntent().getStringExtra("idClassroomClick");
+
 
         etWeekDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +162,43 @@ public class EditClassroomActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mListClassroom.clear();
+                for(DataSnapshot dataSnapshot : snapshot.child(acct.getUid()).getChildren()){
+                    Classroom classroom = dataSnapshot.getValue(Classroom.class);
+                    mListClassroom.add(classroom);
+                }
+                if (mId == null) {
+                    // ADD MODE
+                    etID.requestFocus();
+                } else {
+                    // EDIT MODE
+
+                    Classroom classroom = getClassroom(mListClassroom, mId);
+                    tvTitle.setText(R.string.update_class);
+                    etID.setText(classroom.getId());
+                    etID.setEnabled(false); // không cho phép sửa ID trong lúc edit
+                    etName.setText(classroom.getSubjectName());
+                    etName.requestFocus();
+                    etStart.setText(classroom.getStartTime());
+                    etEnd.setText(classroom.getEndTime());
+                    etRoom.setText(classroom.getClassroomName());
+                    etWeekDay.setText(classroom.getWeekDay());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
     // create a menu for adding and editing mode
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -213,48 +261,48 @@ public class EditClassroomActivity extends AppCompatActivity
             etID.requestFocus();
             return;
         }
+
         String name = etName.getText().toString().trim();
         if (name.length() == 0) {
             etName.setError("?");
             etName.requestFocus();
             return;
         }
-        String etStartTime = etStart.getText().toString();
-        if (etStartTime.length() == 0)
-        {
+        String timeStart = etStart.getText().toString().trim();
+        if (timeStart.length() == 0) {
             etStart.setError("?");
             etStart.requestFocus();
             return;
         }
-        String etEndTime = etEnd.getText().toString();
-        if (etEndTime.length() == 0)
-        {
+        String timeEnd = etEnd.getText().toString().trim();
+        if (timeEnd.length() == 0) {
             etEnd.setError("?");
             etEnd.requestFocus();
             return;
         }
-
-
+        String weekDay = etWeekDay.getText().toString().trim();
+        if (timeEnd.length() == 0) {
+            etWeekDay.setError("?");
+            etWeekDay.requestFocus();
+            return;
+        }
         Classroom classroom = new Classroom();
         classroom.setId(mId);
         classroom.setSubjectName(name);
-        classroom.setStartTime(etStartTime);
-        classroom.setEndTime(etEndTime);
+        classroom.setStartTime(timeStart);
+        classroom.setEndTime(timeEnd);
         classroom.setClassroomName(etRoom.getText().toString());
-        classroom.setWeekDay(etWeekDay.getText().toString());
-        DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-        if (dbHelper.add(classroom) > 0)
-        {
-            showToastMessage(getString(R.string.saved));
+        classroom.setWeekDay(weekDay);
+        if(checkIdExits(mListClassroom, mId)){
+            etID.setError("!");
+            etID.requestFocus();
+            Toast.makeText(this, "ID already exits", Toast.LENGTH_LONG).show();
+            return;
+        }else{
+            mDatabase.child(acct.getUid()).child(classroom.getId()).setValue(classroom);
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
         }
-        else
-        {
-            if (dbHelper.get(mId) != null)
-                showToastMessage(getString(R.string.class_exits));
-            else
-                showToastMessage(getString(R.string.error));
-        }
-        this.finish();
+
     }
 
     private void updateClassroom()
@@ -265,26 +313,41 @@ public class EditClassroomActivity extends AppCompatActivity
             etID.requestFocus();
             return;
         }
+
         String name = etName.getText().toString().trim();
         if (name.length() == 0) {
             etName.setError("?");
             etName.requestFocus();
             return;
         }
+        String timeStart = etStart.getText().toString().trim();
+        if (timeStart.length() == 0) {
+            etStart.setError("?");
+            etStart.requestFocus();
+            return;
+        }
+        String timeEnd = etEnd.getText().toString().trim();
+        if (timeEnd.length() == 0) {
+            etEnd.setError("?");
+            etEnd.requestFocus();
+            return;
+        }
+        String weekDay = etWeekDay.getText().toString().trim();
+        if (timeEnd.length() == 0) {
+            etWeekDay.setError("?");
+            etWeekDay.requestFocus();
+            return;
+        }
         Classroom classroom = new Classroom();
         classroom.setId(mId);
         classroom.setSubjectName(name);
-        classroom.setStartTime(etStart.getText().toString());
-        classroom.setEndTime(etEnd.getText().toString());
+        classroom.setStartTime(timeStart);
+        classroom.setEndTime(timeEnd);
         classroom.setClassroomName(etRoom.getText().toString());
-        classroom.setWeekDay(etWeekDay.getText().toString());
-        DbClassroomHelper dbHelper = new DbClassroomHelper(this, null);
-        if (dbHelper.update(classroom) > 0) {
-            showToastMessage(getString(R.string.saved));
-            this.finish();
-        } else {
-            showToastMessage(getString(R.string.error));
-        }
+        classroom.setWeekDay(weekDay);
+        mDatabase.child(acct.getUid()).child(classroom.getId()).setValue(classroom);
+        Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
+
     }
 
     // show a message to delete a classroom in db with classroom's id
@@ -297,16 +360,33 @@ public class EditClassroomActivity extends AppCompatActivity
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        DbClassroomHelper dbHelper = new DbClassroomHelper(EditClassroomActivity.this, null);
-                        if (dbHelper.delete(id) > 0) {
-                            showToastMessage(getString(R.string.deleted));
-                            EditClassroomActivity.this.finish();
-                        } else {
-                            showToastMessage(getString(R.string.error));
-                        }
+                        mDatabase.child(acct.getUid()).child(mId).setValue(null);
+                        mDatabaseStudent.child(acct.getUid()).child(mId).setValue(null);
+                        mDatabaseAttendance.child(acct.getUid()).child(mId).setValue(null);
+                        Toast.makeText(EditClassroomActivity.this, "Deleted", Toast.LENGTH_LONG).show();
                     }
                 });
         b.create().show();
+    }
+
+    private Classroom getClassroom( List<Classroom> listClassroom ,String id){
+        Classroom result = new Classroom();
+        for(Classroom i : listClassroom){
+            if(i.getId().equals(id)){
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private Boolean checkIdExits(List<Classroom> listClassroom ,String id){
+        for(Classroom i : listClassroom){
+            if(i.getId().equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void showToastMessage(String msg)

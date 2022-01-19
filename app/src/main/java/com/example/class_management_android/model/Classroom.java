@@ -3,89 +3,71 @@ package com.example.class_management_android.model;
 public class Classroom
 {
     private String id;
-    private String subject_name;
-    private String start_time;
-    private String end_time;
-    private String classroom_name;
-    private String week_day;
-    private int total_student;
+    private String subjectName;
+    private String startTime;
+    private String endTime;
+    private String classroomName;
+    private String weekDay;
 
     public Classroom()
     {
 
     }
 
-    public Classroom(String id, String subject_name, String start_time, String end_time, String classroom_name, String week_day,int total_student) {
+    public Classroom(String id, String subjectName, String startTime, String endTime, String classroomName, String weekDay) {
         this.id = id;
-        this.subject_name = subject_name;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.classroom_name = classroom_name;
-        this.week_day = week_day;
-        this.total_student = total_student;
+        this.subjectName = subjectName;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.classroomName = classroomName;
+        this.weekDay = weekDay;
     }
 
-    public String getId()
-    {
-        return this.id;
+    public String getId() {
+        return id;
     }
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getSubjectName()
-    {
-        return this.subject_name;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    public void setSubjectName(String subject_name)
-    {
-        this.subject_name = subject_name;
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
     }
 
-    public String getStartTime()
-    {
-        return this.start_time;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setStartTime(String start_time)
-    {
-        this.start_time = start_time;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public String getEndTime()
-    {
-        return this.end_time;
+    public String getEndTime() {
+        return endTime;
     }
 
-    public void setEndTime(String end_time)
-    {
-        this.end_time = end_time;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    public String getClassroomName()
-    {
-        return this.classroom_name;
+    public String getClassroomName() {
+        return classroomName;
     }
 
-    public void setClassroomName(String classroom_name)
-    {
-        this.classroom_name = classroom_name;
+    public void setClassroomName(String classroomName) {
+        this.classroomName = classroomName;
     }
 
-    public String getWeekDay() { return this.week_day;}
-
-    public void setWeekDay(String week_day) { this.week_day = week_day; }
-
-    public int getTotalStudent()
-    {
-        return this.total_student;
+    public String getWeekDay() {
+        return weekDay;
     }
 
-    public void setTotalStudent(int total_student)
-    {
-        this.total_student = total_student;
+    public void setWeekDay(String weekDay) {
+        this.weekDay = weekDay;
     }
 }
