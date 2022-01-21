@@ -37,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class StudentsListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, LifecycleObserver
 {
@@ -128,10 +129,29 @@ public class StudentsListActivity extends AppCompatActivity implements SearchVie
                 this.finish();
                 return true;
             }
+            case R.id.random_action: {
+                callRandomStudent();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void callRandomStudent(){
+        if (mListStudents.size() == 0) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle(R.string.diemdanh).setMessage("There 're no students in the student list!");
+            b.create().show();
+        }
+        else {
+            Random generator = new Random();
+            int index = generator.nextInt(mListStudents.size());
+            Student temp_std = mListStudents.get(index);
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle(R.string.diemdanh).setMessage("Name: " + temp_std.getName() + "\nCode: " + temp_std.getId());
+            b.create().show();
+        }
+    }
 
     public void addStudent(View v)
     {

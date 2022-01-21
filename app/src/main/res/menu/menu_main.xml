@@ -8,7 +8,7 @@
         android:title=""
         app:showAsAction="always" />
     <item
-        android:id="@+id/attendance"
+        android:id="@+id/random_action"
         android:icon="@mipmap/ic_goingaunhien_foreground"
         android:title=""
         app:showAsAction="always" />
