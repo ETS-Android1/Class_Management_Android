@@ -292,16 +292,17 @@ public class EditStudentActivity extends AppCompatActivity
         student.setId(mId);
         student.setName(name);
         student.setBirthday(getDateFormat(mBirthday));
-        if (radMale.isChecked())
+        if (radMale.isChecked()) {
             student.setGender(1);
-        else{
+        }
+        else {
             student.setGender(0);
+        }
         student.setClassId(classID);
         student.setPhoneNumber(phoneNumber);
         student.setEmail(email);
         mDatabase.child(acct.getUid()).child(classID).child(student.getId()).setValue(student);
         Toast.makeText(this, "Updated", Toast.LENGTH_LONG).show();
-        }
     }
 
     private Student getStudent( List<Student> listStudent ,String id){
